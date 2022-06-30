@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuddieApp", "BuddieApp.csproj", "{4002396B-5780-4979-B778-24976137A90C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4002396B-5780-4979-B778-24976137A90C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4002396B-5780-4979-B778-24976137A90C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4002396B-5780-4979-B778-24976137A90C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4002396B-5780-4979-B778-24976137A90C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5C7E69D8-7186-40B9-A8FF-FE8DD30478C0}
+	EndGlobalSection
+EndGlobal
