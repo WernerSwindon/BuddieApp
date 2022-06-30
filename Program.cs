@@ -13,72 +13,73 @@ namespace BuddieApp
     {
         static void Main(string[] args)
         {
-            String Url = "https://swapi.dev/api/people/?page=1";
+            String Url = "https://swapi.dev/api/people";
 
-            //List<(String Name, Int32 HashValue)> Characters = new List<(string Name, int HashValue)>();
+            List<CharacterGroup> CharacterGroups = new List<CharacterGroup>();
 
-            List<(List<String> Films, String Name)> Characters = new List<(List<string> Films, string Name)>();
-
-            while (!String.IsNullOrEmpty(Url))
+            while (!String.IsNullOrEmpty(Url)) // Loop through pages.
             {
-                String JsonValue = GetJson(Url);
+                String JsonValue = GetJson(Url); // get the Json value.
                 Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(JsonValue);
 
                 foreach (var x in myDeserializedClass.results)
                 {
-                    if (Characters.Any(y => y.Films == x.films))
+                    Boolean found = false;
+
+                    //Console.WriteLine(x.name);
+                    //foreach (var f in x.films)
+                    //    Console.WriteLine(f);
+                    //Console.WriteLine("");
+
+                    for (int y = 0; y < CharacterGroups.Count(); y++)
                     {
-                        //Characters.Where(y => y.Films == x.films).
+                        var firstNotSecond = CharacterGroups[y].Films.Except(x.films).ToList();
+                        var secondNotFirst = x.films.Except(CharacterGroups[y].Films).ToList();
+
+                        // Check if there is already a group with the same films. Add the name to the list.
+                        if (!firstNotSecond.Any() && !secondNotFirst.Any())
+                        {
+                            CharacterGroups[y].Names += "," + x.name;
+                            found = true;
+                            break;
+                        }
                     }
 
-                    //Characters.Add((x.name, x.films.GetHashCode()));
+                    // No grouping match found, add name with list of films to the list.
+                    if (!found)
+                    {
+                        CharacterGroup cg = new CharacterGroup();
+                        cg.Films = x.films;
+                        cg.Names = x.name;
+                        CharacterGroups.Add(cg);
+                    }
                 }
 
                 Url = myDeserializedClass.next;
             }
 
-            //var newList = Characters.OrderBy(z => z.HashValue);
+            // Output the list.
+            Console.WriteLine("Buddies");
 
-            //Int32 PreviousHashValue = newList.First().HashValue;
-            //String BuddieResponse = String.Empty;
+            foreach (var x in CharacterGroups)
+            {
+                Console.WriteLine(x.Names);
+            }
 
-            //foreach (var x in newList)
-            //{
-            //    if (PreviousHashValue != x.HashValue)
-            //    {
-            //        Console.WriteLine(BuddieResponse);
-            //        PreviousHashValue = x.HashValue;
-            //        BuddieResponse = String.Empty;
-            //    }
-            //    else
-            //    {
-            //        BuddieResponse += x.Name + ",";
-            //    }
-            //}
-
-            Console.WriteLine("Completed.");
+            Console.WriteLine($"{Environment.NewLine}Completed.");
             Console.ReadLine();
         }
 
         private static String GetJson(String Url)
         {
-            // Create a request for the URL. 		
+            String responseFromServer = String.Empty;
+
             WebRequest request = WebRequest.Create(Url);
-            // If required by the server, set the credentials.
             request.Credentials = CredentialCache.DefaultCredentials;
-            // Get the response.
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            // Display the status.
-            //Console.WriteLine(response.StatusDescription);
-            // Get the stream containing content returned by the server.
             Stream dataStream = response.GetResponseStream();
-            // Open the stream using a StreamReader for easy access.
             StreamReader reader = new StreamReader(dataStream);
-            // Read the content.
-            string responseFromServer = reader.ReadToEnd();
-            // Display the content.
-            //Console.WriteLine(responseFromServer);
-            // Cleanup the streams and the response.
+            responseFromServer = reader.ReadToEnd();
             reader.Close();
             dataStream.Close();
             response.Close();
@@ -114,5 +115,11 @@ namespace BuddieApp
             public List<Result> results { get; set; }
         }
 
+        public class CharacterGroup
+        {
+            public List<String> Films { get; set; }
+
+            public String Names { get; set; }
+        }
     }
 }
